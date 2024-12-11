@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,11 +26,11 @@ export function CompaniesTable({ filters, changeFilter }: CompaniesTableProps) {
     queryKey: ["getCompanies", JSON.stringify(filters)],
     queryFn: () => publicApi.companiesList(filters),
   });
+  const companiesList = data?.data.data;
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>An error has occurred: {error.message}</div>;
 
-  console.log(Math.ceil((data?.data.recordsTotal || 0) / filters.pageSize));
   return (
     <div className="flex flex-col justify-center items-center">
       <Table className="border rounded-md">
@@ -46,8 +45,8 @@ export function CompaniesTable({ filters, changeFilter }: CompaniesTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.data.data && data?.data?.data?.length > 0 ? (
-            data?.data.data.map((row) => (
+          {companiesList && data?.data?.data?.length > 0 ? (
+            companiesList.map((row) => (
               <TableRow key={row.id} className=" text-muted-foreground">
                 <TableCell>
                   <div className="w-10 h-10 bg-muted rounded-md flex items-center justify-center">

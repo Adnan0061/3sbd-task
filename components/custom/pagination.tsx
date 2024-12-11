@@ -19,6 +19,9 @@ export default function Pagination({
   filters,
   changeFilter,
 }: CompaniesTableProps) {
+  const { availablePageSizes, pageSize, page, length, start } = filters;
+  const recordsTotal = data?.data.recordsTotal;
+
   return (
     <div className="w-full pt-6 px-4 flex items-center justify-between gap-2">
       <div className="w-fit flex justify-center items-center gap-2">
@@ -26,7 +29,7 @@ export default function Pagination({
           Row per page
         </p>
         <Select
-          value={filters.pageSize.toString()}
+          value={pageSize.toString()}
           onValueChange={(value) =>
             changeFilter({
               ...filters,
@@ -39,7 +42,7 @@ export default function Pagination({
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
-            {filters?.availablePageSizes.map((pageSize) => (
+            {availablePageSizes.map((pageSize) => (
               <SelectItem key={pageSize} value={pageSize}>
                 {pageSize}
               </SelectItem>
@@ -49,11 +52,9 @@ export default function Pagination({
       </div>
       <div>
         <p className="text-muted-foreground text-xs">
-          {(filters.page - 1) * filters.length + 1} -{" "}
-          {(data?.data.recordsTotal || 0) < filters.page * filters.length
-            ? data?.data.recordsTotal
-            : filters.page * filters.length}{" "}
-          of {data?.data.recordsTotal} items
+          {(page - 1) * length + 1} -{" "}
+          {(recordsTotal || 0) < page * length ? recordsTotal : page * length}{" "}
+          of {recordsTotal} items
         </p>
       </div>
       <div className="flex items-center justify-between gap-2">
@@ -63,39 +64,37 @@ export default function Pagination({
           onClick={() =>
             changeFilter({
               ...filters,
-              page: filters.page - 1,
-              start: filters.start - filters.length,
+              page: page - 1,
+              start: start - length,
             })
           }
-          disabled={filters.page == 1}
+          disabled={page == 1}
         >
           {"<"}
         </Button>
         <div className="flex items-center gap-1">
-          {[
-            ...Array(
-              Math.ceil((data?.data.recordsTotal || 0) / filters.pageSize)
-            ).keys(),
-          ].map((i) => (
-            <Button
-              variant={"ghost"}
-              className={`px-2 h-6 text-xs ${
-                filters.page == i + 1
-                  ? "bg-blue-500 text-white"
-                  : "text-muted-foreground"
-              }`}
-              key={i}
-              onClick={() =>
-                changeFilter({
-                  ...filters,
-                  page: i + 1,
-                  start: filters.pageSize * i,
-                })
-              }
-            >
-              {i + 1}
-            </Button>
-          ))}
+          {[...Array(Math.ceil((recordsTotal || 0) / pageSize)).keys()].map(
+            (i) => (
+              <Button
+                variant={"ghost"}
+                className={`px-2 h-6 text-xs ${
+                  page == i + 1
+                    ? "bg-blue-500 text-white"
+                    : "text-muted-foreground"
+                }`}
+                key={i}
+                onClick={() =>
+                  changeFilter({
+                    ...filters,
+                    page: i + 1,
+                    start: pageSize * i,
+                  })
+                }
+              >
+                {i + 1}
+              </Button>
+            )
+          )}
         </div>
         <Button
           variant={"ghost"}
@@ -103,24 +102,14 @@ export default function Pagination({
           onClick={() =>
             changeFilter({
               ...filters,
-              page: filters.page + 1,
-              start: filters.start + filters.length,
+              page: page + 1,
+              start: start + length,
             })
           }
-          disabled={
-            filters.page ==
-            Math.ceil((data?.data.recordsTotal || 0) / filters.pageSize)
-          }
+          disabled={page == Math.ceil((recordsTotal || 0) / pageSize)}
         >
           {">"}
         </Button>
-        {/* <button
-          className="border rounded p-1"
-          onClick={() => table.lastPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {">>"}
-        </button> */}
       </div>
     </div>
   );
