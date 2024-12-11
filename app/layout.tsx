@@ -19,12 +19,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  useRouter,
-  usePathname,
-  useParams,
-  useSearchParams,
-} from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,10 +30,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
   const pathname = usePathname();
-  const params = useParams();
-  const searchParams = useSearchParams();
   const [expandedSections, setExpandedSections] = useState({
     business: true,
     purchase: false,
@@ -63,7 +55,7 @@ export default function RootLayout({
   const handleDotColor = (path: string) => {
     return pathname.includes(path) ? "bg-blue-600" : "bg-gray-500";
   };
-  console.log(router, pathname, params, searchParams);
+  console.log(pathname);
   return (
     <html lang="en">
       <body className={cn(inter.className, "min-h-screen")}>
