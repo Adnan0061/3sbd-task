@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Trash2 } from "lucide-react";
+import { Check, Pencil, Trash2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -68,7 +68,13 @@ export function CompaniesTable({ filters, changeFilter }: CompaniesTableProps) {
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.groupName}</TableCell>
                 <TableCell>{row.vatNumber}</TableCell>
-                <TableCell>{row.active}</TableCell>
+                <TableCell>
+                  {row.active ? (
+                    <Check className="ml-4 text-green-500" />
+                  ) : (
+                    <X className="ml-4 text-red-500" />
+                  )}
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button variant="ghost" size="icon">

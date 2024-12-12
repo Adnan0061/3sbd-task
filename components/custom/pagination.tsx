@@ -38,7 +38,7 @@ export default function Pagination({
             })
           }
         >
-          <SelectTrigger id="page-size" className="bg-muted h-8 w-11 px-1.5">
+          <SelectTrigger id="page-size" className="bg-muted h-8 px-1.5">
             <SelectValue placeholder="All" />
           </SelectTrigger>
           <SelectContent>
